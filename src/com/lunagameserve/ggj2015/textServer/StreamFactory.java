@@ -38,7 +38,7 @@ public class StreamFactory {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             try {
                 /* We need to include a header so we know how to route information */
-                return "stdin " + reader.readLine();
+                return reader.readLine();
             } catch (IOException e) {
                 return null;
             }
