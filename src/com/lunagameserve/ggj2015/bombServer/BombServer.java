@@ -1,6 +1,7 @@
 package com.lunagameserve.ggj2015.bombServer;
 
 import com.lunagameserve.ggj2015.textServer.Stream;
+import com.lunagameserve.ggj2015.textServer.StreamFactory;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -18,7 +19,7 @@ public class BombServer {
         return rand;
     }
 
-    private Stream textServerStream;
+    private Stream textServerStream = StreamFactory.createStream();
 
     private HashMap<String, Game> liveGames = new HashMap<>();
 
