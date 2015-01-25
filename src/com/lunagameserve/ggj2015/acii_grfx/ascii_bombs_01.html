@@ -37,7 +37,7 @@
 							------------------
 
 
-   							   |  |  |  |  |
+							   |  |  |  |  |
 							   |  |  |  |  |
 							   |  |  |  |  |
 							 __|__|__|__|__|
@@ -96,32 +96,32 @@
 
 
 
-							      ______________
+								  ______________
 							------| 0 |     | 1 |------
 							------| 2 |     | 3 |------
-							      |             |
-							      --------------
+								  |             |
+								  --------------
 
 
 
 
-							        |
-							        |
-							      __|____________
-							      | 0 |     | 1 |------
+									|
+									|
+								  __|____________
+								  | 0 |     | 1 |------
 							------| 2 |         |
-							      |         | 3 |
-							      --------------
-							                  |
-							                  |
-							                  |
+								  |         | 3 |
+								  --------------
+											  |
+											  |
+											  |
 
 
-          ,--.|.
-       __/  - * -
-     ,d00b.  '|'
-     008800     
-     '900P'     
+		  ,--.|.
+	   __/  - * -
+	 ,d00b.  '|'
+	 008800     
+	 '900P'     
 
 
 
@@ -146,7 +146,7 @@ finger point right - U+1F449					\u1F449
 5 - U+0035 U+20E3						\u20E3
 6 - U+0036 U+20E3						\u20E3
 7 - U+0037 U+20E3						\u20E3
-8 - U+0038 U+20E3						\u20E3
+8 - U+0038 U+20E3						\u0038\u20E3
 9 - U+0039 U+20E3						\u20E3
 
 
@@ -166,7 +166,26 @@ finger point right - U+1F449					\u1F449
 
 <script>
 
-	$('pre.codes').html( '\nscissors - U+2702						\u2702 \nbomb - U+1F4A3							💣 \ncollision - U+1F4A5						\u1F4A5 \nfinger point up - U+1F446					\u1F446 \nfinger point down - U+1F447					\u1F447 \nfinger point left - U+1F448					\u1F448 \nfinger point right - U+1F449					\u1F449 \n\n0 - U+0030 U+20E3						\u0030 \n1 - U+0031 U+20E3						\u0031 \n2 - U+0032 U+20E3						\u0032 \n3 - U+0033 U+20E3						\u0033 \n4 - U+0034 U+20E3						\u20E3 \n5 - U+0035 U+20E3						\u20E3 \n6 - U+0036 U+20E3						\u20E3 \n7 - U+0037 U+20E3						\u20E3 \n8 - U+0038 U+20E3						\u20E3 \n9 - U+0039 U+20E3						\u20E3 \n' );
+	$('pre.codes').html( '\nscissors - U+2702						\u2702 \nbomb - U+1F4A3					💣 \ud83d\udca3 \ncollision - U+1F4A5						\u1F4A5 \nfinger point up - U+1F446					\u1F446 \nfinger point down - U+1F447					\u1F447 \nfinger point left - U+1F448					\u1F448 \nfinger point right - U+1F449					\u1F449 \n\n0 - U+0030 U+20E3						\u0030 \n1 - U+0031 U+20E3						\u0031 \n2 - U+0032 U+20E3						\u0032 \n3 - U+0033 U+20E3						\u0033 \n4 - U+0034 U+20E3						\u20E3 \n5 - U+0035 U+20E3						\u20E3 \n6 - U+0036 U+20E3						\u20E3 \n7 - U+0037 U+20E3						\u20E3 \n8 - U+0038 U+20E3						\u0038\u20E3 \n9 - U+0039 U+20E3						\u20E3 \n' );
+
+
+	function findSurrogatePair(point) {
+		// assumes point > 0xffff
+		var offset = point - 0x10000,
+			lead = 0xd800 + (offset >> 10),
+			trail = 0xdc00 + (offset & 0x3ff);
+		return [lead.toString(16), trail.toString(16)];
+	}
+
+	// find pair for U+1F600
+	findSurrogatePair(0x1f600); // ["d83d", "de00"]
+
+	// find pair for U+1F64F
+	findSurrogatePair(0x1f64f); // ["d83d", "de4f"]
+
+	console.log( findSurrogatePair(0x1F4A3) );
+
+	console.log('\ud83d\udca3');
 	
 
 	var c = document.getElementById( 'canvas' );
