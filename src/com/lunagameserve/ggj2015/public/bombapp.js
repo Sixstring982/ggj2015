@@ -1,6 +1,10 @@
-var http = require('http');
-http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello World\n');
-}).listen(1337, '127.0.0.1');
-console.log('Server running at http://127.0.0.1:1337/');
+var express = require('express');
+var app = express();
+var port = process.env.PORT || 8080;
+app.use(express.static(__dirname));
+app.get('*', function(req, res) {
+	res.sendFile(__dirname); // load our public/index.html file
+});
+app.listen(port);
+console.log('Server running at http://localhost:8080');
+exports = module.exports = app;
