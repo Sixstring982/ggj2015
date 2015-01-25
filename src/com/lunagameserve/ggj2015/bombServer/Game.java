@@ -2,6 +2,7 @@ package com.lunagameserve.ggj2015.bombServer;
 
 import com.lunagameserve.ggj2015.bombServer.bomb.Bomb;
 import com.lunagameserve.ggj2015.bombServer.bomb.BombState;
+import com.lunagameserve.ggj2015.bombServer.bomb.WireState;
 import com.lunagameserve.ggj2015.bombServer.player.Player;
 import com.lunagameserve.ggj2015.bombServer.player.PlayerAlignment;
 import com.lunagameserve.ggj2015.bombServer.player.PlayerMessage;
@@ -18,6 +19,7 @@ public class Game {
 
     private static final int MAX_PLAYERS = 10;
     private static final int INFO_SEND_DELAY_MS = 10000;
+    private static final int BOMB_DETONATION_INCREMENTS = 30;
 
     /**
      * Players in this game, indexed by their identifiers.
@@ -29,6 +31,8 @@ public class Game {
     private Bomb bomb;
     private AtomicBoolean started = new AtomicBoolean(false);
 
+    private final String creatingPlayerIdentifier;
+
     private Thread infoSendingThread;
 
     private final String identifier;
@@ -37,7 +41,8 @@ public class Game {
         return identifier;
     }
 
-    public Game(Collection<String> existingIdentifiers) {
+    public Game(Collection<String> existingIdentifiers, String creatingPlayerIdentifier) {
+        this.creatingPlayerIdentifier = creatingPlayerIdentifier;
         this.identifier = GenerateIdentifier(existingIdentifiers);
     }
 
@@ -60,22 +65,21 @@ public class Game {
         assignDefuser();
         assignAlignments();
         broadcastAlignments(serverStream);
-        infoSendingThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                sendInfoLoop(serverStream);
-            }
-        });
+        infoSendingThread = new Thread(this::sendInfoLoop);
         infoSendingThread.start();
     }
 
     public void stop() {
         started.set(false);
+        bomb.setState(BombState.Defused);
     }
 
-    private void sendInfoLoop(Stream serverStream) {
+    private void sendInfoLoop() {
         Log.debug("Starting info thread.");
         while(started.get()) {
+            Log.debug("Sending info...");
+            bomb.sendInformation(informants);
+
             try {
                 Thread.sleep(INFO_SEND_DELAY_MS);
             } catch (InterruptedException e) {
@@ -83,10 +87,27 @@ public class Game {
                 System.exit(3);
             }
 
-            Log.debug("Sending info...");
-            bomb.sendInformation(informants);
+            bomb.tickTimer();
+            if (bomb.outOfTime()) {
+                broadcastGameEnd("BOOM!!! The bomb exploded.", PlayerAlignment.Evil);
+                stop();
+            }
         }
         Log.debug("Stopping info thread.");
+    }
+
+    private void broadcastGameEnd(String prefix, PlayerAlignment winner) {
+        boolean didPlayerWin;
+        StringBuilder response;
+        for (Player p : players.values()) {
+            response = new StringBuilder();
+            didPlayerWin = p.getAlignment() == winner;
+            response.append(prefix + " You " + (didPlayerWin ? "win" : "lose") + "!\n");
+            for (Player pp : players.values()) {
+                response.append(pp.getDisplayName() + ": " + pp.getAlignment() + "\n");
+            }
+            p.sendResponse(response.toString());
+        }
     }
 
     private int badPlayerCount(int totalPlayers) {
@@ -163,13 +184,6 @@ public class Game {
         return players.keySet();
     }
 
-    public void printLobby(PrintStream out) {
-        out.println("Game " + identifier + " lobby:");
-        for (Player p : players.values()) {
-            p.printStatus(out);
-        }
-    }
-
     public void printStatus(PrintStream out) {
         out.println("BOMB:");
         if (bomb == null) {
@@ -223,19 +237,96 @@ public class Game {
     public void handleMessage(PlayerMessage message) {
         if (message.getMessage().equals("start game")) {
             handleStartGameMessage(message);
+        } else if (message.getMessage().equals("destroy game")) {
+            handleDestroyGameMessage(message);
         } else  if (message.getMessage().startsWith("cut ")) {
-
+            handleCutWireMessage(message);
+        } else if (message.getMessage().startsWith("name ")) {
+            handleChangeNameMessage(message);
+        } else if (message.getMessage().startsWith("votekill ")) {
+            handleVoteKillMessage(message);
         } else {
             message.sendResponse("Unrecognized command.");
         }
+
         printStatus(System.err);
     }
 
-    private void handleStartGameMessage(PlayerMessage message) {
-        if (!started.get()) {
-            start(message.getServerStream());
+    private void handleVoteKillMessage(PlayerMessage message) {
+        String vkStatus = message.getMessage().substring("votekill ".length());
+        boolean newValue = false;
+        if (vkStatus.equals("on")) {
+            newValue = true;
+        } else if (vkStatus.equals("off")) {
+            newValue = false;
         } else {
+            message.sendResponse("Votekill may be turned on or off, e.g. 'votekill off'.");
+            return;
+        }
+        players.get(message.getPlayerID()).setVoteKill(newValue);
+        recalculateKillVotes();
+    }
+
+    private void recalculateKillVotes() {
+        int votesRemaining = (int) (Math.ceil(informants.size() / 2) + 1);
+        for (Player p : players.values()) {
+            if (p.getVoteKill()) {
+                votesRemaining--;
+                if (votesRemaining <= 0) {
+                    broadcastGameEnd("The informants have killed the defuser!",
+                                     PlayerAlignment.opposite(players.get(defuserIdentifier).getAlignment()));
+                    stop();
+                }
+            }
+        }
+    }
+
+    private void handleChangeNameMessage(PlayerMessage message) {
+        String newName = message.getMessage().substring("name ".length());
+        players.get(message.getPlayerID()).setDisplayName(newName);
+    }
+
+    private void handleDestroyGameMessage(PlayerMessage message) {
+        if (!message.getPlayerID().equals(creatingPlayerIdentifier)) {
+            message.sendResponse("You did not create this game.");
+        } else if (started.get()) {
             message.sendResponse("The game has already started.");
+        } else {
+            stop();
+        }
+    }
+
+    private void handleCutWireMessage(PlayerMessage message) {
+        String wireId = message.getMessage().substring("cut ".length(), message.getMessage().length());
+        if (defuserIdentifier.equals(message.getPlayerID())) {
+            if (bomb.hasWireIdentifier(wireId)) {
+                bomb.cutWire(wireId);
+                broadcast("The " + wireId + " wire has been cut!" +
+                          (bomb.getWireState(wireId).equals(WireState.Bad) ? " It was a bad wire!" : ""));
+                if (bomb.getState().equals(BombState.Defused)) {
+                    broadcastGameEnd("The bomb has been defused!", PlayerAlignment.Good);
+                    stop();
+                } else if (bomb.getState().equals(BombState.Exploded)) {
+                    broadcastGameEnd("The bomb exploded!!!", PlayerAlignment.Evil);
+                    stop();
+                }
+            } else {
+                message.sendResponse("There is no wire named <" + wireId + ">.");
+            }
+        } else {
+            message.sendResponse("You are not defusing the bomb.");
+        }
+    }
+
+    private void handleStartGameMessage(PlayerMessage message) {
+        if (!message.getPlayerID().equals(creatingPlayerIdentifier)) {
+            message.sendResponse("You did not create this game.");
+        } else {
+            if (!started.get()) {
+                start(message.getServerStream());
+            } else {
+                message.sendResponse("The game has already started.");
+            }
         }
     }
 

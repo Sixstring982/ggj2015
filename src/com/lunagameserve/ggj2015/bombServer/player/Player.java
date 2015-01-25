@@ -18,11 +18,29 @@ public class Player {
         this.displayName = displayName;
     }
 
+    public String getDisplayName() {
+        if (displayName == null) {
+            return identifier;
+        } else {
+            return displayName;
+        }
+    }
+
     public PlayerAlignment getAlignment() {
         return alignment;
     }
 
     private Stream serverStream;
+
+    private boolean voteKill = false;
+
+    public void setVoteKill(boolean value) {
+        this.voteKill = value;
+    }
+
+    public boolean getVoteKill() {
+        return voteKill;
+    }
 
     public void setAlignment(PlayerAlignment alignment) {
         this.alignment = alignment;

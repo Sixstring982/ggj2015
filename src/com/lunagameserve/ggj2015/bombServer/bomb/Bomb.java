@@ -14,7 +14,12 @@ import java.util.List;
  */
 public class Bomb {
 
+    public static final int INCREMENT_DURATION_MS = 10000;
+    private static final int STARTING_INCREMENTS = 30;
+
     private BombState state = BombState.Active;
+
+    private int incrementsRemaining = STARTING_INCREMENTS;
 
     public BombState getState() {
         return state;
@@ -37,6 +42,18 @@ public class Bomb {
 
     public int getGoodWires() {
         return goodWires;
+    }
+
+    public void tickTimer() {
+        incrementsRemaining--;
+    }
+
+    public boolean outOfTime() {
+        return incrementsRemaining <= 0;
+    }
+
+    public void decreaseTimerByHalf() {
+        incrementsRemaining >>= 2;
     }
 
     public Bomb(int wireCount) {
@@ -78,6 +95,9 @@ public class Bomb {
             throw new IllegalArgumentException("Wire <" + identifier + "> does not exist.");
         } else {
             wireToCut.cut();
+            if (wireToCut.getState().equals(WireState.Bad)) {
+                decreaseTimerByHalf();
+            }
             recalculateBombState();
         }
     }
@@ -86,10 +106,12 @@ public class Bomb {
         int goodCount = 0;
         int badCount = 0;
         for (Wire w : wires) {
-            if (w.getState().equals(WireState.Bad)) {
-                badCount++;
-            } else if (w.getState().equals(WireState.Good)) {
-                goodCount++;
+            if (!w.isCut()) {
+                if (w.getState().equals(WireState.Bad)) {
+                    badCount++;
+                } else if (w.getState().equals(WireState.Good)) {
+                    goodCount++;
+                }
             }
         }
 
@@ -104,10 +126,31 @@ public class Bomb {
         int informantIdx = BombServer.getRandom().nextInt(players.size());
         for (Player p : players) {
             if (informantIdx == 0) {
-                p.sendResponse(generateInformation());
+                p.sendResponse(generateInformation() + " " + getRemainingTimeString());
             }
             informantIdx--;
         }
+    }
+
+    public boolean hasWireIdentifier(String identifier) {
+        for (Wire w : wires) {
+            if (w.getIdentifier().equals(identifier)) {
+                return true;
+            }
+        }
+         return false;
+    }
+
+    public WireState getWireState(String wireIdentifier) {
+        return wireLookup.get(wireIdentifier).getState();
+    }
+
+    private String getRemainingTimeString() {
+        int msRemaining = incrementsRemaining * INCREMENT_DURATION_MS;
+        int secondsRemaining = (msRemaining / 1000);
+        int minutesRemaining = secondsRemaining / 60;
+        secondsRemaining %= 60;
+        return "The bomb will explode in " + minutesRemaining + ":" + secondsRemaining + ".";
     }
 
     private String generateInformation() {

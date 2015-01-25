@@ -23,8 +23,8 @@ public class GameList {
      * Creates a new game and inserts it into this {@link GameList}.
      * @return The identifier of the created {@link Game}.
      */
-    private String createGame() {
-        Game game = new Game(liveGames.keySet());
+    private String createGame(String creatorIdentifier) {
+        Game game = new Game(liveGames.keySet(), creatorIdentifier);
         liveGames.put(game.getIdentifier(), game);
         return game.getIdentifier();
     }
@@ -62,6 +62,7 @@ public class GameList {
         } else {
             game.handleMessage(message);
 
+            /* TODO Figure out why a game marked over doesn't get deleted. */
             if (game.isOver()) {
                 destroyGame(game);
             }
@@ -69,7 +70,7 @@ public class GameList {
     }
 
     private void handleNewGameCommand(PlayerMessage message) {
-        String newGameID = createGame();
+        String newGameID = createGame(message.getPlayerID());
         try {
             joinPlayer(message.getPlayerID(), newGameID, message.getServerStream());
         } catch(Exception e) {

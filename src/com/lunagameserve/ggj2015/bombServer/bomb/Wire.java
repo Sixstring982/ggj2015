@@ -41,4 +41,8 @@ public class Wire {
     public void cut() {
         this.cut = true;
     }
+
+    public boolean isCut() {
+        return cut;
+    }
 }

@@ -16,4 +16,8 @@ public enum PlayerAlignment {
             return "evil";
         }
     };
+
+    public static PlayerAlignment opposite(PlayerAlignment alignment) {
+        return alignment.equals(Evil) ? Good : Evil;
+    }
 }
