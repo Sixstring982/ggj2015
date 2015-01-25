@@ -13,14 +13,14 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Created by six on 1/23/15.
+ * @author six
+ * @since 1/23/15
  */
 public class Game {
 
     private static final int MIN_PLAYERS = 3;
     private static final int MAX_PLAYERS = 10;
     private static final int INFO_SEND_DELAY_MS = 10000;
-    private static final int BOMB_DETONATION_INCREMENTS = 30;
 
     /**
      * Players in this game, indexed by their identifiers.
@@ -35,8 +35,6 @@ public class Game {
     private AtomicBoolean gameOver = new AtomicBoolean(false);
 
     private final String creatingPlayerIdentifier;
-
-    private Thread infoSendingThread;
 
     private final String identifier;
 
@@ -62,13 +60,13 @@ public class Game {
         }
     }
 
-    public void start(final Stream serverStream) {
+    public void start() {
         started.set(true);
         bomb = new Bomb(players.size());
         assignDefuser();
         assignAlignments();
-        broadcastAlignments(serverStream);
-        infoSendingThread = new Thread(this::sendInfoLoop);
+        broadcastAlignments();
+        Thread infoSendingThread = new Thread(this::sendInfoLoop);
         infoSendingThread.start();
     }
 
@@ -105,9 +103,9 @@ public class Game {
         for (Player p : players.values()) {
             response = new StringBuilder();
             didPlayerWin = p.getAlignment() == winner;
-            response.append(prefix + " You " + (didPlayerWin ? "win" : "lose") + "!\n");
+            response.append(prefix).append(" You ").append(didPlayerWin ? "win" : "lose").append("!\n");
             for (Player pp : players.values()) {
-                response.append(pp.getDisplayName() + ": " + pp.getAlignment() + "\n");
+                response.append(pp.getDisplayName()).append(": ").append(pp.getAlignment()).append("\n");
             }
             p.sendResponse(response.toString());
         }
@@ -125,10 +123,6 @@ public class Game {
             case 10: return 4;
             default: return 5;
         }
-    }
-
-    private int goodPlayerCount(int totalPlayers) {
-        return totalPlayers - badPlayerCount(totalPlayers);
     }
 
     private void assignDefuser() {
@@ -165,11 +159,11 @@ public class Game {
         }
     }
 
-    private void broadcastAlignments(Stream serverStream) {
+    private void broadcastAlignments() {
         StringBuilder response;
         for (Player p : players.values()) {
             response = new StringBuilder();
-            response.append("The game has started. You are on team " + p.getAlignment() + ".");
+            response.append("The game has started. You are on team ").append(p.getAlignment()).append(".");
             if (p.getIdentifier().equals(defuserIdentifier)) {
                 response.append(" You are defusing the bomb.");
             }
@@ -210,7 +204,7 @@ public class Game {
         String newId;
         int idLoops = 0;
         do {
-            newId = new Long(Math.abs(BombServer.getRandom().nextInt())).toString();
+            newId = Long.toString(Math.abs(BombServer.getRandom().nextInt()));
             idLoops++;
 
             if (idLoops > 1000) {
@@ -220,19 +214,6 @@ public class Game {
         } while (existingIdentifiers.contains(newId));
 
         return newId;
-    }
-
-    private int countPlayersLeft() {
-        return Math.min(MAX_PLAYERS,
-                        Math.max(players.size() + 1, 3));
-    }
-
-    private int countGoodPlayers() {
-        int goods = 0;
-        for (Player p : players.values()) {
-            goods += (p.getAlignment().equals(PlayerAlignment.Good) ? 1 : 0);
-        }
-        return goods;
     }
 
     public void handleMessage(PlayerMessage message) {
@@ -258,14 +239,17 @@ public class Game {
             message.sendResponse("You are the defuser, so you cannot vote to kill the defuser.");
         } else {
             String vkStatus = message.getMessage().substring("votekill ".length());
-            boolean newValue = false;
-            if (vkStatus.equals("on")) {
-                newValue = true;
-            } else if (vkStatus.equals("off")) {
-                newValue = false;
-            } else {
-                message.sendResponse("Votekill may be turned on or off, e.g. 'votekill off'.");
-                return;
+            boolean newValue;
+            switch (vkStatus) {
+                case "on":
+                    newValue = true;
+                    break;
+                case "off":
+                    newValue = false;
+                    break;
+                default:
+                    message.sendResponse("Votekill may be turned on or off, e.g. 'votekill off'.");
+                    return;
             }
             Player player = players.get(message.getPlayerID());
             player.setVoteKill(newValue);
@@ -335,7 +319,7 @@ public class Game {
                                      " players, but needs at least " + MIN_PLAYERS + "to begin.");
             } else {
                 if (!started.get()) {
-                    start(message.getServerStream());
+                    start();
                 } else {
                     message.sendResponse("The game has already started.");
                 }
