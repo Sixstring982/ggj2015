@@ -254,18 +254,25 @@ public class Game {
     }
 
     private void handleVoteKillMessage(PlayerMessage message) {
-        String vkStatus = message.getMessage().substring("votekill ".length());
-        boolean newValue = false;
-        if (vkStatus.equals("on")) {
-            newValue = true;
-        } else if (vkStatus.equals("off")) {
-            newValue = false;
+        if (message.getPlayerID().equals(defuserIdentifier)) {
+            message.sendResponse("You are the defuser, so you cannot vote to kill the defuser.");
         } else {
-            message.sendResponse("Votekill may be turned on or off, e.g. 'votekill off'.");
-            return;
+            String vkStatus = message.getMessage().substring("votekill ".length());
+            boolean newValue = false;
+            if (vkStatus.equals("on")) {
+                newValue = true;
+            } else if (vkStatus.equals("off")) {
+                newValue = false;
+            } else {
+                message.sendResponse("Votekill may be turned on or off, e.g. 'votekill off'.");
+                return;
+            }
+            Player player = players.get(message.getPlayerID());
+            player.setVoteKill(newValue);
+            broadcast(player.getDisplayName() + (newValue ? " votes to kill the defuser!" :
+                                                            " retracts their vote to kill the defuser."));
+            recalculateKillVotes();
         }
-        players.get(message.getPlayerID()).setVoteKill(newValue);
-        recalculateKillVotes();
     }
 
     private void recalculateKillVotes() {
