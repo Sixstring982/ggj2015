@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class Game {
 
+    private static final int MIN_PLAYERS = 3;
     private static final int MAX_PLAYERS = 10;
     private static final int INFO_SEND_DELAY_MS = 10000;
     private static final int BOMB_DETONATION_INCREMENTS = 30;
@@ -165,11 +166,14 @@ public class Game {
     }
 
     private void broadcastAlignments(Stream serverStream) {
+        StringBuilder response;
         for (Player p : players.values()) {
-            p.sendResponse("The game has started. You are on team " + p.getAlignment() + ".");
+            response = new StringBuilder();
+            response.append("The game has started. You are on team " + p.getAlignment() + ".");
             if (p.getIdentifier().equals(defuserIdentifier)) {
-                p.sendResponse("You are defusing the bomb.");
+                response.append(" You are defusing the bomb.");
             }
+            p.sendResponse(response.toString());
         }
     }
 
@@ -319,10 +323,15 @@ public class Game {
         if (!message.getPlayerID().equals(creatingPlayerIdentifier)) {
             message.sendResponse("You did not create this game.");
         } else {
-            if (!started.get()) {
-                start(message.getServerStream());
+            if (players.size() < MIN_PLAYERS) {
+                message.sendResponse("This game has " + players.size() +
+                                     " players, but needs at least " + MIN_PLAYERS + "to begin.");
             } else {
-                message.sendResponse("The game has already started.");
+                if (!started.get()) {
+                    start(message.getServerStream());
+                } else {
+                    message.sendResponse("The game has already started.");
+                }
             }
         }
     }
