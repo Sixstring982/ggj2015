@@ -7,7 +7,8 @@ import com.lunagameserve.ggj2015.textServer.StreamFactory;
 import java.util.Random;
 
 /**
- * Created by six on 1/23/15.
+ * @author six
+ * @since 1/23/15
  */
 public class BombServer {
     private static Random rand;
