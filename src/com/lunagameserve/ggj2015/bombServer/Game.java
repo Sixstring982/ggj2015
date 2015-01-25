@@ -163,10 +163,20 @@ public class Game {
         StringBuilder response;
         for (Player p : players.values()) {
             response = new StringBuilder();
-            response.append("The game has started. You are on team ").append(p.getAlignment()).append(".");
-            if (p.getIdentifier().equals(defuserIdentifier)) {
-                response.append(" You are defusing the bomb.");
+            boolean isDefuser = p.getIdentifier().equals(defuserIdentifier);
+            boolean isEvil = p.getAlignment().equals("evil");
+            response.append("You are in a room with a bomb."
+                    +" "+bomb.getGoodWires()+" wires are GOOD."
+                    +" "+bomb.getBadWires() + " wires are BAD.");
+            if(isDefuser) {
+                response.append("\nYou are the DEFUSER, " + (isEvil ? "but you are EVIL!!" : " and you are GOOD."));
+                response.append("\nText 'cut x' to cut wire x.");
+            } else {
+                response.append("\nYou are " + (isEvil ? "an EVIL " : " a GOOD ") + "INFORMANT.");
+                response.append("\n"+defuserIdentifier+" is the defuser.");
             }
+            response.append("\n\nTHE CLOCK IS TICKING!!!");
+
             p.sendResponse(response.toString());
         }
     }
