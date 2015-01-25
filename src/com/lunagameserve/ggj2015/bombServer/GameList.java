@@ -23,8 +23,8 @@ public class GameList {
      * Creates a new game and inserts it into this {@link GameList}.
      * @return The identifier of the created {@link Game}.
      */
-    private String createGame() {
-        Game game = new Game(liveGames.keySet());
+    private String createGame(String creatorIdentifier) {
+        Game game = new Game(liveGames.keySet(), creatorIdentifier);
         liveGames.put(game.getIdentifier(), game);
         return game.getIdentifier();
     }
@@ -34,10 +34,12 @@ public class GameList {
         game.getPlayerIdentifiers().forEach(playerGames::remove);
     }
 
-    private void joinPlayer(String playerId, String gameId) throws GameFullException, DuplicatePlayerException {
+    private void joinPlayer(String playerId, String gameId, Stream serverStream) throws GameFullException,
+                                                                                        DuplicatePlayerException,
+                                                                                        GameInProgressException {
         Game game = liveGames.get(gameId);
         playerGames.put(playerId, game);
-        game.join(playerId);
+        game.join(playerId, serverStream);
     }
 
     public void broadcastShutdown(Stream stream) {
@@ -46,22 +48,73 @@ public class GameList {
         }
     }
 
-    public void handleMessage(PlayerMessage message, Stream serverStream) {
+    public void handleMessage(PlayerMessage message) {
+        Game game = getByPlayerMessage(message);
+        if (game == null) {
         /* Here we handle master lobby level commands. */
-        if (message.getMessage().equals("new game")) {
-
+            if (message.getMessage().equals("new game")) {
+                handleNewGameCommand(message);
+            } else if (message.getMessage().equals("list games")) {
+                handleListGamesCommand(message);
+            } else if (message.getMessage().startsWith("join ")) {
+                handleJoinCommand(message);
+            }
         } else {
-            /* Not master lobby level? Find the game and have it handle the command. */
-            Game game = liveGames.get(message.getPlayerID());
-            if (game == null) {
-                serverStream.write(message.generateResponse("You are not in a game. First, join or create one."));
-            } else {
-                game.handleMessage(message, serverStream);
+            game.handleMessage(message);
 
-                if (game.isOver()) {
-                    destroyGame(game);
-                }
+            if (game.isOver()) {
+                destroyGame(game);
             }
         }
+    }
+
+    private void handleNewGameCommand(PlayerMessage message) {
+        String newGameID = createGame(message.getPlayerID());
+        try {
+            joinPlayer(message.getPlayerID(), newGameID, message.getServerStream());
+        } catch(Exception e) {
+            /* This will not be thrown. */
+            Log.error("Impossibly thrown exception in handleNewGameCommand: " + e.getMessage());
+            System.exit(2);
+        }
+        message.sendResponse("You have joined game " + newGameID + ".");
+    }
+
+    private void handleListGamesCommand(PlayerMessage message) {
+        StringBuilder builder = new StringBuilder();
+        for (String s : liveGames.keySet()) {
+            builder.append(s + (liveGames.get(s).hasStarted() ? " (in progress)" : "") + "\n");
+        }
+        message.sendResponse("Games:\n" + builder.toString());
+    }
+
+    private void handleJoinCommand(PlayerMessage message) {
+        String joinId = message.getMessage().substring("join ".length(), message.getMessage().length());
+        if (liveGames.keySet().contains(joinId)) {
+            try {
+                joinPlayer(message.getPlayerID(), joinId, message.getServerStream());
+                message.sendResponse("You have joined game " + joinId);
+            } catch (GameFullException e) {
+                message.sendResponse("Game " + joinId + " is full.");
+            } catch (DuplicatePlayerException e) {
+                message.sendResponse("You have already joined this game.");
+            } catch (GameInProgressException e) {
+                message.sendResponse("This game has already started.");
+            }
+        } else {
+            message.sendResponse("Game " + joinId + " does not exist.");
+        }
+    }
+
+    private Game getByPlayerID(String playerID) {
+        return playerGames.get(playerID);
+    }
+
+    private Game getByPlayerMessage(PlayerMessage message) {
+        return playerGames.get(message.getPlayerID());
+    }
+
+    private Game getByGameID(String gameID) {
+        return liveGames.get(gameID);
     }
 }

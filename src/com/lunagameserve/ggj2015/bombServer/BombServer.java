@@ -7,16 +7,24 @@ import com.lunagameserve.ggj2015.textServer.StreamFactory;
 import java.util.Random;
 
 /**
- * Created by six on 1/23/15.
+ * @author six
+ * @since 1/23/15
  */
 public class BombServer {
     private static Random rand;
     static {
-        rand = new Random(System.nanoTime());
+        rand = new Random();
+        setSeed(System.nanoTime());
     }
 
     public static Random getRandom() {
         return rand;
+    }
+
+    public static void setSeed(long seed) {
+        Log.debug("New seed: " + seed);
+        rand.setSeed(seed);
+        Log.debug("First PRInt: " + rand.nextInt());
     }
 
     private Stream textServerStream = StreamFactory.createStream();
@@ -44,7 +52,7 @@ public class BombServer {
             incomingLine = textServerStream.read(100);
 
             if (incomingLine != null) {
-                incomingMessage = new PlayerMessage(incomingLine);
+                incomingMessage = new PlayerMessage(incomingLine, textServerStream);
 
                 handleMessage(incomingMessage);
             }
@@ -63,7 +71,7 @@ public class BombServer {
                 message.getPlayerID().equals("stdin")) {
             handleServerMessage(message);
         } else {
-            gameList.handleMessage(message, textServerStream);
+            gameList.handleMessage(message);
         }
     }
 }
