@@ -27,8 +27,8 @@
       <file leaf-file-name="TextServer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/textServer/TextServer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.481482" vertical-offset="4655" max-vertical-offset="5775">
-              <caret line="331" column="37" selection-start-line="331" selection-start-column="37" selection-end-line="331" selection-end-column="37" />
+            <state vertical-scroll-proportion="23.333334" vertical-offset="2445" max-vertical-offset="5775">
+              <caret line="121" column="13" selection-start-line="121" selection-start-column="13" selection-end-line="121" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#2241#2242#0" expanded="true" />
@@ -37,14 +37,24 @@
                 <element signature="e#2477#2478#0" expanded="true" />
                 <element signature="e#2623#2624#0" expanded="true" />
                 <element signature="e#2668#2669#0" expanded="true" />
-                <element signature="e#3759#3760#0" expanded="true" />
-                <element signature="e#3802#3803#0" expanded="true" />
-                <element signature="e#3839#3840#0" expanded="true" />
-                <element signature="e#3869#3870#0" expanded="true" />
-                <element signature="e#6481#6489#0" expanded="true" />
-                <element signature="e#6897#6914#0" expanded="true" />
-                <element signature="e#12203#12218#0" expanded="true" />
+                <element signature="e#3762#3763#0" expanded="true" />
+                <element signature="e#3805#3806#0" expanded="true" />
+                <element signature="e#3842#3843#0" expanded="true" />
+                <element signature="e#3872#3873#0" expanded="true" />
+                <element signature="e#6484#6492#0" expanded="true" />
+                <element signature="e#6900#6917#0" expanded="true" />
+                <element signature="e#12206#12221#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ascii_bombs_01.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/acii_grfx/ascii_bombs_01.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-6.0" vertical-offset="2286" max-vertical-offset="2805">
+              <caret line="162" column="9" selection-start-line="162" selection-start-column="9" selection-end-line="162" selection-end-column="9" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -54,7 +64,22 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="600">
               <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-              <folding />
+              <folding>
+                <element signature="e#242#243#0" expanded="false" />
+                <element signature="e#270#271#0" expanded="false" />
+                <element signature="e#332#333#0" expanded="false" />
+                <element signature="e#366#367#0" expanded="false" />
+                <element signature="e#403#404#0" expanded="false" />
+                <element signature="e#436#437#0" expanded="false" />
+                <element signature="e#466#467#0" expanded="false" />
+                <element signature="e#525#526#0" expanded="false" />
+                <element signature="e#577#578#0" expanded="false" />
+                <element signature="e#629#630#0" expanded="false" />
+                <element signature="e#889#890#0" expanded="false" />
+                <element signature="e#920#921#0" expanded="false" />
+                <element signature="e#950#951#0" expanded="false" />
+                <element signature="e#976#977#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -62,8 +87,8 @@
       <file leaf-file-name="BombServer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/BombServer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.703704" vertical-offset="797" max-vertical-offset="1215">
-              <caret line="71" column="43" selection-start-line="71" selection-start-column="41" selection-end-line="71" selection-end-column="43" />
+            <state vertical-scroll-proportion="-4.6296296" vertical-offset="640" max-vertical-offset="1215">
+              <caret line="55" column="42" selection-start-line="55" selection-start-column="41" selection-end-line="55" selection-end-column="42" />
               <folding>
                 <element signature="e#472#473#0" expanded="true" />
                 <element signature="e#499#500#0" expanded="true" />
@@ -77,29 +102,23 @@
       <file leaf-file-name="GameList.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/GameList.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.814815" vertical-offset="1310" max-vertical-offset="1755">
-              <caret line="108" column="19" selection-start-line="108" selection-start-column="19" selection-end-line="108" selection-end-column="19" />
+            <state vertical-scroll-proportion="-8.925926" vertical-offset="629" max-vertical-offset="2325">
+              <caret line="64" column="27" selection-start-line="64" selection-start-column="27" selection-end-line="64" selection-end-column="27" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PlayerMessage.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/player/PlayerMessage.java">
+      <file leaf-file-name="Game.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/Game.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="780">
-              <caret line="28" column="5" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GameFullException.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/GameFullException.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="210">
-              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-              <folding />
+            <state vertical-scroll-proportion="0.6208791" vertical-offset="3029" max-vertical-offset="6615">
+              <caret line="219" column="20" selection-start-line="219" selection-start-column="20" selection-end-line="219" selection-end-column="20" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#16543#16544#0" expanded="true" />
+                <element signature="e#16579#16580#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -114,32 +133,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DuplicatePlayerException.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/DuplicatePlayerException.java">
+      <file leaf-file-name="PlayerMessage.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/player/PlayerMessage.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="210">
-              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="335" max-vertical-offset="780">
+              <caret line="28" column="5" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Game.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/Game.java">
+      <file leaf-file-name="ascii_bombs_01" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/acii_grfx/ascii_bombs_01">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.152648" vertical-offset="2120" max-vertical-offset="5250">
-              <caret line="92" column="59" selection-start-line="92" selection-start-column="51" selection-end-line="92" selection-end-column="59" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1271#1272#0" expanded="true" />
-                <element signature="e#1304#1305#0" expanded="true" />
-                <element signature="e#6487#6488#0" expanded="true" />
-                <element signature="e#6524#6525#0" expanded="true" />
-                <element signature="e#6580#6581#0" expanded="true" />
-                <element signature="e#6619#6620#0" expanded="true" />
-                <element signature="e#12455#12456#0" expanded="true" />
-                <element signature="e#12491#12492#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="1358" max-vertical-offset="2040">
+              <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -165,8 +174,10 @@
         <option value="$PROJECT_DIR$/src/com/lunagameserve/ggj2015/textServer/StreamFactory.java" />
         <option value="$PROJECT_DIR$/src/com/lunagameserve/ggj2015/textServer/TextServerConfig.java" />
         <option value="$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/BombServer.java" />
-        <option value="$PROJECT_DIR$/src/com/lunagameserve/ggj2015/textServer/TextServer.java" />
         <option value="$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/player/PlayerMessage.java" />
+        <option value="$PROJECT_DIR$/src/com/lunagameserve/ggj2015/acii_grfx/ascii_bombs_01.html" />
+        <option value="$PROJECT_DIR$/src/com/lunagameserve/ggj2015/textServer/TextServer.java" />
+        <option value="$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/GameList.java" />
         <option value="$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/Game.java" />
       </list>
     </option>
@@ -372,6 +383,28 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ggj2015" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ggj2015" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ggj2015" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="acii_grfx" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
@@ -385,7 +418,7 @@
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/commons-io-2.4" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="options.lastSelected" value="editor.preferences.smartKeys" />
@@ -559,7 +592,7 @@
     </configuration>
     <configuration default="false" name="Unnamed" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="com.lunagameserve.ggj2015.MainDriver" />
+      <option name="MAIN_CLASS_NAME" value="com.lunagameserve.ggj2015.bombServer.ServerDriver" />
       <option name="VM_PARAMETERS" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
@@ -608,7 +641,7 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33380282" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3915493" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -645,7 +678,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="10" />
+      <option name="time" value="15" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -729,14 +762,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/GameInProgressException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="210">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/DuplicatePlayerException.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="210">
@@ -745,50 +770,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/GameList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.814815" vertical-offset="1310" max-vertical-offset="1755">
-          <caret line="108" column="19" selection-start-line="108" selection-start-column="19" selection-end-line="108" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/player/PlayerMessage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="780">
-          <caret line="28" column="5" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/textServer/TextServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.481482" vertical-offset="4655" max-vertical-offset="5775">
-          <caret line="331" column="37" selection-start-line="331" selection-start-column="37" selection-end-line="331" selection-end-column="37" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2241#2242#0" expanded="true" />
-            <element signature="e#2285#2286#0" expanded="true" />
-            <element signature="e#2430#2431#0" expanded="true" />
-            <element signature="e#2477#2478#0" expanded="true" />
-            <element signature="e#2623#2624#0" expanded="true" />
-            <element signature="e#2668#2669#0" expanded="true" />
-            <element signature="e#3759#3760#0" expanded="true" />
-            <element signature="e#3802#3803#0" expanded="true" />
-            <element signature="e#3839#3840#0" expanded="true" />
-            <element signature="e#3869#3870#0" expanded="true" />
-            <element signature="e#6481#6489#0" expanded="true" />
-            <element signature="e#6897#6914#0" expanded="true" />
-            <element signature="e#12203#12218#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/bomb/Wire.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="600">
           <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
+          <folding>
+            <element signature="e#242#243#0" expanded="false" />
+            <element signature="e#270#271#0" expanded="false" />
+            <element signature="e#332#333#0" expanded="false" />
+            <element signature="e#366#367#0" expanded="false" />
+            <element signature="e#403#404#0" expanded="false" />
+            <element signature="e#436#437#0" expanded="false" />
+            <element signature="e#466#467#0" expanded="false" />
+            <element signature="e#525#526#0" expanded="false" />
+            <element signature="e#577#578#0" expanded="false" />
+            <element signature="e#629#630#0" expanded="false" />
+            <element signature="e#889#890#0" expanded="false" />
+            <element signature="e#920#921#0" expanded="false" />
+            <element signature="e#950#951#0" expanded="false" />
+            <element signature="e#976#977#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -803,10 +804,81 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/acii_grfx/ascii_bombs_01">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1358" max-vertical-offset="2040">
+          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/acii_grfx/ascii_bombs_01.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.0" vertical-offset="2286" max-vertical-offset="2805">
+          <caret line="162" column="9" selection-start-line="162" selection-start-column="9" selection-end-line="162" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/player/Player.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.40449437" vertical-offset="15" max-vertical-offset="1035">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/player/PlayerMessage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="780">
+          <caret line="28" column="5" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/GameInProgressException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="210">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/textServer/TextServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="23.333334" vertical-offset="2445" max-vertical-offset="5775">
+          <caret line="121" column="13" selection-start-line="121" selection-start-column="13" selection-end-line="121" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2241#2242#0" expanded="true" />
+            <element signature="e#2285#2286#0" expanded="true" />
+            <element signature="e#2430#2431#0" expanded="true" />
+            <element signature="e#2477#2478#0" expanded="true" />
+            <element signature="e#2623#2624#0" expanded="true" />
+            <element signature="e#2668#2669#0" expanded="true" />
+            <element signature="e#3762#3763#0" expanded="true" />
+            <element signature="e#3805#3806#0" expanded="true" />
+            <element signature="e#3842#3843#0" expanded="true" />
+            <element signature="e#3872#3873#0" expanded="true" />
+            <element signature="e#6484#6492#0" expanded="true" />
+            <element signature="e#6900#6917#0" expanded="true" />
+            <element signature="e#12206#12221#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/GameList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.925926" vertical-offset="629" max-vertical-offset="2325">
+          <caret line="64" column="27" selection-start-line="64" selection-start-column="27" selection-end-line="64" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/BombServer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.703704" vertical-offset="797" max-vertical-offset="1215">
-          <caret line="71" column="43" selection-start-line="71" selection-start-column="41" selection-end-line="71" selection-end-column="43" />
+        <state vertical-scroll-proportion="-4.6296296" vertical-offset="640" max-vertical-offset="1215">
+          <caret line="55" column="42" selection-start-line="55" selection-start-column="41" selection-end-line="55" selection-end-column="42" />
           <folding>
             <element signature="e#472#473#0" expanded="true" />
             <element signature="e#499#500#0" expanded="true" />
@@ -818,18 +890,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lunagameserve/ggj2015/bombServer/Game.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.152648" vertical-offset="2120" max-vertical-offset="5250">
-          <caret line="92" column="59" selection-start-line="92" selection-start-column="51" selection-end-line="92" selection-end-column="59" />
+        <state vertical-scroll-proportion="0.6208791" vertical-offset="3029" max-vertical-offset="6615">
+          <caret line="219" column="20" selection-start-line="219" selection-start-column="20" selection-end-line="219" selection-end-column="20" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1271#1272#0" expanded="true" />
-            <element signature="e#1304#1305#0" expanded="true" />
-            <element signature="e#6487#6488#0" expanded="true" />
-            <element signature="e#6524#6525#0" expanded="true" />
-            <element signature="e#6580#6581#0" expanded="true" />
-            <element signature="e#6619#6620#0" expanded="true" />
-            <element signature="e#12455#12456#0" expanded="true" />
-            <element signature="e#12491#12492#0" expanded="true" />
+            <element signature="e#16543#16544#0" expanded="true" />
+            <element signature="e#16579#16580#0" expanded="true" />
           </folding>
         </state>
       </provider>

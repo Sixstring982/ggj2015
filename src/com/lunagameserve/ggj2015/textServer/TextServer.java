@@ -108,7 +108,7 @@ public class TextServer implements Stream {
 
     public void write(String str) {
         System.err.println("WRITE " + str);
-        _sendQueue.push(str);
+        _sendQueue.addLast(str);
     }
 
     /**

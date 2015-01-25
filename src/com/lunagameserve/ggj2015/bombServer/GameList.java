@@ -2,7 +2,10 @@ package com.lunagameserve.ggj2015.bombServer;
 
 import com.lunagameserve.ggj2015.bombServer.player.PlayerMessage;
 import com.lunagameserve.ggj2015.textServer.Stream;
+import sun.misc.CharacterDecoder;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 
 /**
@@ -50,14 +53,28 @@ public class GameList {
 
     public void handleMessage(PlayerMessage message) {
         Game game = getByPlayerMessage(message);
+
+        synchronized (Game.persistedLock) {
+            if (!Game.persistedPlayerScores.containsKey(message.getPlayerID())) {
+                Game.persistedPlayerScores.put(message.getPlayerID(), 0);
+                for(String s : Game.getRulesStrings()) {
+                    message.sendResponse(s);
+                }
+            }
+        }
         if (game == null) {
         /* Here we handle master lobby level commands. */
-            if (message.getMessage().equals("new game")) {
-                handleNewGameCommand(message);
-            } else if (message.getMessage().equals("list games")) {
-                handleListGamesCommand(message);
-            } else if (message.getMessage().startsWith("join ")) {
-                handleJoinCommand(message);
+            if (handleNewGameCommand("new game", message)) {
+            } else if (handleNewGameCommand("new", message)) {
+            } else if (handleListGamesCommand("list", message)) {
+            } else if (handleListGamesCommand("list games", message)) {
+            } else if (handleJoinCommand("join game", message)) {
+            } else if (handleJoinCommand("join", message)) {
+            } else if (Game.handleHelpMessage("rules", message)) {
+            } else if (Game.handleHelpMessage("?", message)) {
+            } else if (Game.handleHelpMessage("help", message)) {
+            } else {
+                message.sendResponse("Unrecognized command. Text 'help' for help.");
             }
         } else {
             game.handleMessage(message);
@@ -68,7 +85,10 @@ public class GameList {
         }
     }
 
-    private void handleNewGameCommand(PlayerMessage message) {
+    private boolean handleNewGameCommand(String command, PlayerMessage message) {
+        if(!message.getMessage().equals(command)) {
+            return false;
+        }
         String newGameID = createGame(message.getPlayerID());
         try {
             joinPlayer(message.getPlayerID(), newGameID, message.getServerStream());
@@ -78,18 +98,40 @@ public class GameList {
             System.exit(2);
         }
         message.sendResponse("You have joined game " + newGameID + ".");
+        return true;
     }
 
-    private void handleListGamesCommand(PlayerMessage message) {
+    private boolean handleListGamesCommand(String command, PlayerMessage message) {
+        if(!message.getMessage().equals(command)) {
+            return false;
+        }
         StringBuilder builder = new StringBuilder();
         for (String s : liveGames.keySet()) {
             builder.append(s + (liveGames.get(s).hasStarted() ? " (in progress)" : "") + "\n");
         }
         message.sendResponse("Games:\n" + builder.toString());
+        return true;
     }
 
-    private void handleJoinCommand(PlayerMessage message) {
-        String joinId = message.getMessage().substring("join ".length(), message.getMessage().length());
+    private static String getUnicodeChar(int codepoint) {
+        return new String(Character.toChars(codepoint));
+    }
+
+    private static String getUtf8Char(int[] bytes) {
+        Charset utf8 = Charset.forName("UTF-8");
+        byte[] bbytes = new byte[bytes.length];
+        for(int i = 0; i < bytes.length; ++i) {
+            bbytes[i] = (byte)bytes[i];
+        }
+        ByteBuffer buffer = ByteBuffer.wrap(bbytes);
+        return utf8.decode(buffer).toString();
+    }
+
+    private boolean handleJoinCommand(String command, PlayerMessage message) {
+        if(!message.getMessage().startsWith(command+" ")) {
+            return false;
+        }
+        String joinId = message.getMessage().substring((command+" ").length(), message.getMessage().length());
         if (liveGames.keySet().contains(joinId)) {
             try {
                 joinPlayer(message.getPlayerID(), joinId, message.getServerStream());
@@ -104,6 +146,7 @@ public class GameList {
         } else {
             message.sendResponse("Game " + joinId + " does not exist.");
         }
+        return true;
     }
 
     private Game getByPlayerID(String playerID) {

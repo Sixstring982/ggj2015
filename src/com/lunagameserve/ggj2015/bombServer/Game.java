@@ -11,6 +11,7 @@ import com.lunagameserve.ggj2015.textServer.Stream;
 import java.io.PrintStream;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BooleanSupplier;
 
 /**
  * @author six
@@ -21,6 +22,10 @@ public class Game {
     private static final int MIN_PLAYERS = 3;
     private static final int MAX_PLAYERS = 10;
     private static final int INFO_SEND_DELAY_MS = 10000;
+
+    public static Object persistedLock = new Object();
+    public static HashMap<String, Integer> persistedPlayerScores = new HashMap<>();
+    public static HashMap<String, String> persistedPlayerDisplayNames = new HashMap<>();
 
     /**
      * Players in this game, indexed by their identifiers.
@@ -56,7 +61,13 @@ public class Game {
         } else if (players.size() >= MAX_PLAYERS) {
             throw new GameFullException("This game is full.");
         } else {
-            players.put(playerId, new Player(playerId, serverStream));
+            Player newPlayer = new Player(playerId, serverStream);
+            players.put(playerId, newPlayer);
+            synchronized (persistedLock) {
+                if (persistedPlayerDisplayNames.containsKey(newPlayer.getIdentifier())) {
+                    newPlayer.setDisplayName(persistedPlayerDisplayNames.get(newPlayer.getIdentifier()));
+                }
+            }
         }
     }
 
@@ -101,11 +112,44 @@ public class Game {
         boolean didPlayerWin;
         StringBuilder response;
         for (Player p : players.values()) {
+            didPlayerWin = p.getAlignment() == winner;
+            synchronized (persistedLock) {
+                int playerScore = 0;
+                if (persistedPlayerScores.containsKey(p.getIdentifier())) {
+                    playerScore = persistedPlayerScores.get(p.getIdentifier());
+                    if(didPlayerWin) {
+                        playerScore++;
+                    }
+                }
+                persistedPlayerScores.put(p.getIdentifier(), playerScore);
+            }
+        }
+        for (Player p : players.values()) {
             response = new StringBuilder();
             didPlayerWin = p.getAlignment() == winner;
-            response.append(prefix).append(" You ").append(didPlayerWin ? "win" : "lose").append("!\n");
+            response.append(prefix).append(" YOU ").append(didPlayerWin ? "WIN" : "LOSE").append("!");
+            int thisPlayerScore = 0;
+            synchronized (persistedLock) {
+                if (persistedPlayerScores.containsKey(p.getIdentifier())) {
+                    thisPlayerScore = persistedPlayerScores.get(p.getIdentifier());
+                }
+            }
+            p.sendResponse(response.toString());
+
+            response = new StringBuilder();
+            response.append("You: ("+p.getAlignment()+"): "+thisPlayerScore+"\n");
+
             for (Player pp : players.values()) {
-                response.append(pp.getDisplayName()).append(": ").append(pp.getAlignment()).append("\n");
+                if(pp == p) {
+                    continue;
+                }
+                int playerScore = 0;
+                synchronized (persistedLock) {
+                    if (persistedPlayerScores.containsKey(pp.getIdentifier())) {
+                        playerScore = persistedPlayerScores.get(pp.getIdentifier());
+                    }
+                }
+                response.append(pp.getDisplayName()).append(" (").append(pp.getAlignment()).append("): ").append(playerScore).append("\n");
             }
             p.sendResponse(response.toString());
         }
@@ -164,19 +208,23 @@ public class Game {
         for (Player p : players.values()) {
             response = new StringBuilder();
             boolean isDefuser = p.getIdentifier().equals(defuserIdentifier);
-            boolean isEvil = p.getAlignment().equals("evil");
+            boolean isEvil = (p.getAlignment() == PlayerAlignment.Evil);
             response.append("You are in a room with a bomb."
                     +" "+bomb.getGoodWires()+" wires are GOOD."
                     +" "+bomb.getBadWires() + " wires are BAD.");
-            if(isDefuser) {
-                response.append("\nYou are the DEFUSER, " + (isEvil ? "but you are EVIL!!" : " and you are GOOD."));
-                response.append("\nText 'cut x' to cut wire x.");
-            } else {
-                response.append("\nYou are " + (isEvil ? "an EVIL " : " a GOOD ") + "INFORMANT.");
-                response.append("\n"+defuserIdentifier+" is the defuser.");
-            }
-            response.append("\n\nTHE CLOCK IS TICKING!!!");
+            p.sendResponse(response.toString());
 
+            response = new StringBuilder();
+            if(isDefuser) {
+                response.append("You are the DEFUSER, " + (isEvil ? "but you are EVIL!!" : " and you are GOOD."));
+            } else {
+                response.append("\nYou are " + (isEvil ? "an EVIL " : "a GOOD ") + "INFORMANT.");
+                response.append(" "+defuserIdentifier+" is the defuser.");
+            }
+            p.sendResponse(response.toString());
+
+            response = new StringBuilder();
+            response.append("The bomb will explode in 5 minutes. GO!!!");
             p.sendResponse(response.toString());
         }
     }
@@ -228,39 +276,51 @@ public class Game {
     }
 
     public void handleMessage(PlayerMessage message) {
-        if (message.getMessage().equals("start game")) {
-            handleStartGameMessage(message);
-        } else if (message.getMessage().equals("destroy game")) {
-            handleDestroyGameMessage(message);
-        } else  if (message.getMessage().startsWith("cut ")) {
-            handleCutWireMessage(message);
-        } else if (message.getMessage().startsWith("name ")) {
-            handleChangeNameMessage(message);
-        } else if (message.getMessage().startsWith("votekill ")) {
-            handleVoteKillMessage(message);
+        if (handleStartGameMessage("start", message)) {
+        } else if (handleStartGameMessage("start game", message)) {
+        } else if (handleDestroyGameMessage("destroy game", message)) {
+        } else if (handleCutWireMessage("cut", message)) {
+        } else if (handleCutWireMessage("cut wire", message)) {
+        } else if (handleChangeNameMessage("i'm", message)) {
+        } else if (handleChangeNameMessage("i am", message)) {
+        } else if (handleChangeNameMessage("my name is", message)) {
+        } else if (handleChangeNameMessage("name", message)) {
+        } else if (handleVoteKillMessage("votekill", message)) {
+        } else if (handleVoteKillMessage("kill", message)) {
+        } else if (handleVoteKillMessage("vote kill", message)) {
+        } else if (handleHelpMessage("rules", message)) {
+        } else if (handleHelpMessage("?", message)) {
+        } else if (handleHelpMessage("help", message)) {
         } else {
-            message.sendResponse("Unrecognized command.");
+            message.sendResponse("Unrecognized command. Text 'help' for help.");
         }
 
         printStatus(System.err);
     }
 
-    private void handleVoteKillMessage(PlayerMessage message) {
+    private boolean handleVoteKillMessage(String command, PlayerMessage message) {
+        if(!message.getMessage().equals(command) && !message.getMessage().startsWith(command+" ")) {
+            return false;
+        }
         if (message.getPlayerID().equals(defuserIdentifier)) {
             message.sendResponse("You are the defuser, so you cannot vote to kill the defuser.");
         } else {
-            String vkStatus = message.getMessage().substring("votekill ".length());
             boolean newValue;
-            switch (vkStatus) {
-                case "on":
-                    newValue = true;
-                    break;
-                case "off":
-                    newValue = false;
-                    break;
-                default:
-                    message.sendResponse("Votekill may be turned on or off, e.g. 'votekill off'.");
-                    return;
+            if(message.getMessage().equals(command)) {
+                newValue = true;
+            } else {
+                String vkStatus = message.getMessage().substring((command + " ").length()).trim();
+                switch (vkStatus) {
+                    case "on":
+                        newValue = true;
+                        break;
+                    case "off":
+                        newValue = false;
+                        break;
+                    default:
+                        message.sendResponse("Votekill may be turned on or off, e.g. 'votekill off'.");
+                        return true;
+                }
             }
             Player player = players.get(message.getPlayerID());
             player.setVoteKill(newValue);
@@ -268,6 +328,7 @@ public class Game {
                                                             " retracts their vote to kill the defuser."));
             recalculateKillVotes();
         }
+        return true;
     }
 
     private void recalculateKillVotes() {
@@ -284,12 +345,22 @@ public class Game {
         }
     }
 
-    private void handleChangeNameMessage(PlayerMessage message) {
-        String newName = message.getMessage().substring("name ".length());
+    private boolean handleChangeNameMessage(String command, PlayerMessage message) {
+        if(!message.getMessage().startsWith(command+" ")) {
+            return false;
+        }
+        String newName = message.getMessage().substring((command+" ").length()).trim();
         players.get(message.getPlayerID()).setDisplayName(newName);
+        synchronized (persistedLock) {
+            persistedPlayerDisplayNames.put(message.getPlayerID(), newName);
+        }
+        return true;
     }
 
-    private void handleDestroyGameMessage(PlayerMessage message) {
+    private boolean handleDestroyGameMessage(String command, PlayerMessage message) {
+        if(!message.getMessage().equals(command)) {
+            return false;
+        }
         if (!message.getPlayerID().equals(creatingPlayerIdentifier)) {
             message.sendResponse("You did not create this game.");
         } else if (started.get()) {
@@ -297,9 +368,13 @@ public class Game {
         } else {
             stop();
         }
+        return true;
     }
 
-    private void handleCutWireMessage(PlayerMessage message) {
+    private boolean handleCutWireMessage(String command, PlayerMessage message) {
+        if(!message.getMessage().startsWith(command + " ")) {
+            return false;
+        }
         String wireId = message.getMessage().substring("cut ".length(), message.getMessage().length());
         if (defuserIdentifier.equals(message.getPlayerID())) {
             if (bomb.hasWireIdentifier(wireId)) {
@@ -319,9 +394,13 @@ public class Game {
         } else {
             message.sendResponse("You are not defusing the bomb.");
         }
+        return true;
     }
 
-    private void handleStartGameMessage(PlayerMessage message) {
+    private boolean handleStartGameMessage(String command, PlayerMessage message) {
+        if(!message.getMessage().equals(command)) {
+            return false;
+        }
         if (!message.getPlayerID().equals(creatingPlayerIdentifier)) {
             message.sendResponse("You did not create this game.");
         } else {
@@ -336,6 +415,24 @@ public class Game {
                 }
             }
         }
+        return true;
+    }
+
+    public static boolean handleHelpMessage(String command, PlayerMessage message) {
+        if(!message.getMessage().equals(command)) {
+            return false;
+        }
+        for(String s : getRulesStrings()) {
+            message.sendResponse(s);
+        }
+        return true;
+    }
+
+    public static String[] getRulesStrings() {
+        return new String[] {
+                "THE DEFUSER is a game of trust and strategy."+
+                "\nSee http://bit.ly/1L93ms6 for rules."
+        };
     }
 
     public boolean hasStarted() {
