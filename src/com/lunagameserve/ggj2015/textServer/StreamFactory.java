@@ -14,7 +14,7 @@ public class StreamFactory {
      * @return
      */
     public static Stream createStream() {
-        return new StdinStream();
+        return new TextServer();
     }
 
     private static class StdinStream implements Stream {
