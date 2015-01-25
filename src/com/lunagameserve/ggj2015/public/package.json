@@ -1,0 +1,11 @@
+{
+  "name": "the-diffuser",
+  "version": "1.0.0",
+  "description": "diffuse the bomb before time runs out ;p",
+  "main": "bombapp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "glenn trent brooks",
+  "license": "ISC"
+}
