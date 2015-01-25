@@ -1,3 +1,10 @@
 out/
 src/com/lunagameserve/ggj2015/textServer/TextServerConfig.java
 .DS_Store
+src/com/lunagameserve/ggj2015/thediffuser.sublime-workspace
+src/com/lunagameserve/ggj2015/public/bower_components/angular/angular-csp.css
+src/com/lunagameserve/ggj2015/public/bower_components/angular/angular.js
+src/com/lunagameserve/ggj2015/public/bower_components/angular/angular.min.js
+src/com/lunagameserve/ggj2015/public/bower_components/angular/angular.min.js.gzip
+src/com/lunagameserve/ggj2015/public/bower_components/angular/angular.min.js.map
+src/com/lunagameserve/ggj2015/public/bower_components/angular/README.md
