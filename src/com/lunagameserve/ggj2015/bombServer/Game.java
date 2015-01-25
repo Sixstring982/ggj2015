@@ -31,6 +31,8 @@ public class Game {
     private Bomb bomb;
     private AtomicBoolean started = new AtomicBoolean(false);
 
+    private AtomicBoolean gameOver = new AtomicBoolean(false);
+
     private final String creatingPlayerIdentifier;
 
     private Thread infoSendingThread;
@@ -71,7 +73,7 @@ public class Game {
 
     public void stop() {
         started.set(false);
-        bomb.setState(BombState.Defused);
+        gameOver.set(true);
     }
 
     private void sendInfoLoop() {
@@ -135,13 +137,12 @@ public class Game {
 
         players.values().forEach(playerList::add);
 
-        for (int i = 0; i < playerList.size(); i++) {
+        for (int i = 0; i < players.size(); i++) {
             if (i == defuserIdx) {
                 defuserIdentifier = playerList.get(i).getIdentifier();
             } else {
-                informants.add(playerList.get(0));
+                informants.add(playerList.get(i));
             }
-            playerList.remove(0);
         }
     }
 
@@ -173,11 +174,7 @@ public class Game {
     }
 
     public boolean isOver() {
-        if (!started.get()) {
-            return false;
-        } else {
-            return !bomb.getState().equals(BombState.Active);
-        }
+        return gameOver.get();
     }
 
     public Collection<String> getPlayerIdentifiers() {

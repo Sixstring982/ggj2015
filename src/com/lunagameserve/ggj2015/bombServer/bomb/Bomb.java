@@ -147,7 +147,7 @@ public class Bomb {
 
     private String getRemainingTimeString() {
         int msRemaining = incrementsRemaining * INCREMENT_DURATION_MS;
-        int secondsRemaining = (msRemaining / 1000);
+        Integer secondsRemaining = (msRemaining / 1000);
         int minutesRemaining = secondsRemaining / 60;
         secondsRemaining %= 60;
         return "The bomb will explode in " + minutesRemaining + ":" + secondsRemaining + ".";

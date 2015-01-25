@@ -62,7 +62,6 @@ public class GameList {
         } else {
             game.handleMessage(message);
 
-            /* TODO Figure out why a game marked over doesn't get deleted. */
             if (game.isOver()) {
                 destroyGame(game);
             }
