@@ -1,16 +1,15 @@
-package com.lunagameserve.ggj2015;
+package com.lunagameserve.ggj2015.client;
 
-import com.lunagameserve.ggj2015.bombServer.BombServer;
 import com.lunagameserve.ggj2015.bombServer.Log;
 import com.lunagameserve.ggj2015.bombServer.LogLevel;
+import com.lunagameserve.ggj2015.client.gui.MainFrame;
 
 /**
- * @author sixstring982
- * @since 1/23/15
+ * Created by six on 1/24/15.
  */
-public class MainDriver {
+public class ClientDriver {
     public static void main(String[] args) {
         Log.setLevel(LogLevel.Debug);
-        new BombServer();
+        new MainFrame(new Arguments(args));
     }
 }
