@@ -16,7 +16,7 @@ public class PlayerMessage {
     private final String message;
 
     public String getMessage() {
-        return message;
+        return message.toLowerCase().trim(); // gke: changing this to make commands case insensitive
     }
 
     private final Stream serverStream;

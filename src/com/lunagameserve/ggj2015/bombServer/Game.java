@@ -204,7 +204,8 @@ public class Game {
         String newId;
         int idLoops = 0;
         do {
-            newId = Long.toString(Math.abs(BombServer.getRandom().nextInt()));
+            // gke: changing this so we have shorter ids
+            newId = Integer.toString(idLoops); // Long.toString(Math.abs(BombServer.getRandom().nextInt()));
             idLoops++;
 
             if (idLoops > 1000) {

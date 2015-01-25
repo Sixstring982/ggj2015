@@ -41,6 +41,7 @@ public class TextServer implements Stream {
     private boolean _isDone;
     Thread _sendThread;
     Thread _recvThread;
+    Thread _stdinThread;
 
     public TextServer() {
         _receiveQueue = new LinkedBlockingDeque<String>();
@@ -82,6 +83,13 @@ public class TextServer implements Stream {
             }
         });
         _recvThread.start();
+        _stdinThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                stdinThread();
+            }
+        });
+        _stdinThread.start();
     }
 
     public synchronized void stop() {
@@ -92,12 +100,14 @@ public class TextServer implements Stream {
         try {
             _sendThread.wait();
             _recvThread.wait();
+            _stdinThread.wait();
         } catch(InterruptedException ex) {
             ex.printStackTrace();
         }
     }
 
     public void write(String str) {
+        System.err.println("WRITE " + str);
         _sendQueue.push(str);
     }
 
@@ -109,17 +119,32 @@ public class TextServer implements Stream {
      *         if the timeout elapses.
      */
     public String read(int timeout) {
-        return null;
+        try {
+            return _receiveQueue.poll(timeout, TimeUnit.MILLISECONDS);
+        } catch(InterruptedException ex) {
+            return null;
+        }
     }
 
     public int linesAvailable() {
-        return 0;
+        return _receiveQueue.size();
     }
 
     synchronized boolean IsDone() {
         return _isDone;
     }
 
+    private void stdinThread() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        while (!IsDone()) {
+            try {
+                /* We need to include a header so we know how to route information */
+                _receiveQueue.push(reader.readLine());
+            } catch (IOException e) {
+                continue;
+            }
+        }
+    }
 
     private void sendThread() {
         while (!IsDone()) {
@@ -132,19 +157,37 @@ public class TextServer implements Stream {
             if(s == null) {
                 continue;
             }
-            Pattern pattern = Pattern.compile("^[+]([0-9]{11}) (.*)$");
-            Matcher matcher = pattern.matcher(s);
-            if(!matcher.matches()) {
-                System.err.println("FAIL SEND SYNTAX " + s);
+            s = s.trim();
+            int i = s.indexOf(" ");
+            if(i == -1) {
+                System.err.println("FAIL SEND SYNTAX1 " + s);
                 continue;
             }
-            String phoneNumber = matcher.group(1);
-            String message = matcher.group(2);
-            if(!sendSms(phoneNumber, message)) {
-                System.err.println("FAIL SEND " + s);
+            String phoneNumber = s.substring(0,i);
+            phoneNumber = phoneNumber.trim();
+
+            if(!Pattern.matches("^[+]([0-9]{11})$", phoneNumber)) {
+                System.err.println("FAIL SEND SYNTAX2 " + s);
                 continue;
             }
-            System.err.println("OK SEND "+s);
+
+            String message = s.substring(i).trim();
+            int tries;
+            boolean didSend = false;
+            for(tries = 0; !didSend && tries < 3; ++tries) {
+                didSend = sendSms(phoneNumber, message);
+                if(!didSend) {
+                    System.err.println("FAIL SEND " + s);
+                    try {
+                        Thread.sleep(1000);
+                    } catch(InterruptedException ex) {
+                        break;
+                    }
+                }
+            }
+            if(didSend) {
+                System.err.println("OK SEND " + s);
+            }
         }
     }
 
@@ -210,6 +253,7 @@ public class TextServer implements Stream {
                         //System.err.println("AFTER "+messageFrom + " " +dateSent+" " + messageBody);
                         lastMessageTime = dateSent;
                         messagesThatSecond.clear();
+                        messagesThatSecond.add(messageSid);
                     } else if (messagesThatSecond.contains(messageSid)) {
                         //System.err.println("DONE "+messageFrom + " " +dateSent+" " + messageBody);
                         continue;
@@ -270,7 +314,7 @@ public class TextServer implements Stream {
                 System.err.println(responseContentString);
                 return null;
             }
-            System.err.println("SUCCESS GET " + url);
+            // System.err.println("SUCCESS GET " + url);
 
             JSONObject responseContentJson = new JSONObject(responseContentString);
             return responseContentJson;

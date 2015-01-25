@@ -48,6 +48,7 @@ public class BombServer {
         String incomingLine;
         PlayerMessage incomingMessage;
         Log.debug("Server running.");
+        textServerStream.start();
         while (running) {
             incomingLine = textServerStream.read(100);
 
@@ -57,6 +58,7 @@ public class BombServer {
                 handleMessage(incomingMessage);
             }
         }
+        textServerStream.stop();
     }
 
     private void handleServerMessage(PlayerMessage message) {
