@@ -1,6 +1,5 @@
 package com.lunagameserve.ggj2015.textServer;
 
-import com.sun.xml.internal.ws.client.sei.ResponseBuilder;
 import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.auth.AuthScope;
