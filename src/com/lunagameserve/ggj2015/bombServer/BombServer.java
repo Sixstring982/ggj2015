@@ -53,7 +53,11 @@ public class BombServer {
             incomingLine = textServerStream.read(100);
 
             if (incomingLine != null) {
-                incomingMessage = new PlayerMessage(incomingLine, textServerStream);
+                try {
+                    incomingMessage = new PlayerMessage(incomingLine, textServerStream);
+                } catch(IllegalArgumentException ex) {
+                    continue;
+                }
 
                 handleMessage(incomingMessage);
             }

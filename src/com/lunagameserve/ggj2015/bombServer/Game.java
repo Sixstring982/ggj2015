@@ -54,9 +54,9 @@ public class Game {
 
     public void join(String playerId, Stream serverStream) throws GameFullException,
                                                                   DuplicatePlayerException, GameInProgressException {
-        if (started.get()) {
-            throw new GameInProgressException("This game has already started.");
-        } else if (players.containsKey(playerId)) {
+        if (gameOver.get()) {
+            throw new GameInProgressException("The game is over.");
+        } else if(players.containsKey(playerId)) {
             throw new DuplicatePlayerException("This player is already in this game.");
         } else if (players.size() >= MAX_PLAYERS) {
             throw new GameFullException("This game is full.");
@@ -68,6 +68,14 @@ public class Game {
                     newPlayer.setDisplayName(persistedPlayerDisplayNames.get(newPlayer.getIdentifier()));
                 }
             }
+            if(started.get()) {
+                if(BombServer.getRandom().nextBoolean()) {
+                    newPlayer.setAlignment(PlayerAlignment.Evil);
+                } else {
+                    newPlayer.setAlignment(PlayerAlignment.Good);
+                }
+            }
+            broadcast(newPlayer.getDisplayName()+" has joined the game.");
         }
     }
 
@@ -379,7 +387,7 @@ public class Game {
         if (defuserIdentifier.equals(message.getPlayerID())) {
             if (bomb.hasWireIdentifier(wireId)) {
                 bomb.cutWire(wireId);
-                broadcast("The " + wireId + " wire has been cut!" +
+                broadcast("Wire " + wireId + " was cut!" +
                           (bomb.getWireState(wireId).equals(WireState.Bad) ? " It was a bad wire!" : ""));
                 if (bomb.getState().equals(BombState.Defused)) {
                     broadcastGameEnd("The bomb has been defused!", PlayerAlignment.Good);

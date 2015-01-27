@@ -139,7 +139,14 @@ public class TextServer implements Stream {
         while (!IsDone()) {
             try {
                 /* We need to include a header so we know how to route information */
-                _receiveQueue.push(reader.readLine());
+                String line = reader.readLine();
+                if(line != null) {
+                    _receiveQueue.push(line);
+                } else {
+                    try {
+                        Thread.sleep(100);
+                    } catch(InterruptedException ex) {}
+                }
             } catch (IOException e) {
                 continue;
             }
